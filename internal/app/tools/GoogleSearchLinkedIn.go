@@ -7,19 +7,19 @@ import (
 	"github.com/dragaoazuljr/ice-breaker-go/internal/app/scrapper"
 )
 
-type GoogleSearch struct {
+type GoogleSearchLinkedIn struct {
 }
 
-var _ tools.Tool = GoogleSearch{}
+var _ tools.Tool = GoogleSearchLinkedIn{}
 
-func (g GoogleSearch) Name() string {
+func (g GoogleSearchLinkedIn) Name() string {
 	return "Crawl Google 4 LinkedIn profile pages"
 }
 
-func (g GoogleSearch) Description() string {
+func (g GoogleSearchLinkedIn) Description() string {
 	return "Useful for when you need to find a link of LinkedIn profile for a person"
 }
 
-func (g GoogleSearch) Call(ctx context.Context, input string) (string, error) {
+func (g GoogleSearchLinkedIn) Call(ctx context.Context, input string) (string, error) {
 	return scrapper.GetFirstGoogleResultLink(input, "LinkedIn")
 }

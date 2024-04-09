@@ -7,17 +7,16 @@ import (
 	"os"
 	"strings"
 
+	agentTools "github.com/dragaoazuljr/ice-breaker-go/internal/app/tools"
 	"github.com/tmc/langchaingo/agents"
 	"github.com/tmc/langchaingo/chains"
 	"github.com/tmc/langchaingo/llms"
 	"github.com/tmc/langchaingo/llms/ollama"
 	"github.com/tmc/langchaingo/tools"
-
-	aTools "github.com/dragaoazuljr/ice-breaker-go/internal/app/tools"
 )
 
-func LookupLinkedIn(name string) string {
-	model := os.Getenv("MODEL")
+func LookupTwitter(name string) string {
+	model:= os.Getenv("MODEL")
 
 	llm, err := ollama.New(ollama.WithModel(model))
 
@@ -26,14 +25,13 @@ func LookupLinkedIn(name string) string {
 	}
 
 	var template = fmt.Sprintf(`
-    given the full name %s I want you to get it me a link to their LinkedIn profile page.
-    Your answer should be a valid LinkedIn profile URL. 
+		given the full name %s I want you to get it me a link to their Twitter profile page.
+		Your answer should be a valid Twitter profile URL.
 		Answer only with the URL, do not include any other information.
-    If the url has a different domain than www.linkedin.com, replace it with www, like br.linkedin.com will be www.linkedin.com 
-	`, name)
+		`, name)
 
 	var tools = []tools.Tool{
-		aTools.GoogleSearchLinkedIn{},
+		agentTools.GoogleSearchTwitter{},
 	}
 
 	executor, err := func() (*agents.Executor, error) {

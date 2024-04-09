@@ -35,7 +35,7 @@ func GetFirstGoogleResultLink(query string, complement string) (string, error) {
 		return "", err
 	}
 
-	if err := elem.SendKeys(fmt.Sprintf("%s %s", query, complement)); err != nil {
+	if err := elem.SendKeys(fmt.Sprintf("\"%s\" %s", query, complement)); err != nil {
 		return "", err
 	}
 

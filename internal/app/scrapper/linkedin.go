@@ -99,7 +99,6 @@ func ScrapeLinkedInProfileData(profileUrl string) (string, error) {
 	var experience string;
 	var publications string;
 
-	fmt.Print(nameElem.Error, titleElem.Error, locationElem.Error, aboutElem.Error)
 	re := regexp.MustCompile(`[\s\n\r]+`)
 
 	if nameElem.Error == nil {
