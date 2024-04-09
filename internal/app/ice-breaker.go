@@ -13,9 +13,7 @@ import (
 	"github.com/tmc/langchaingo/prompts"
 )
 
-func IceBreaker() {
-	var name = "Danillo Moraes"
-
+func IceBreaker(name string) {
 	linkedInProfileUrl := agents.LookupLinkedIn(name);
 	linkedInData, error := scrapper.ScrapeLinkedInProfileData(linkedInProfileUrl);
 
