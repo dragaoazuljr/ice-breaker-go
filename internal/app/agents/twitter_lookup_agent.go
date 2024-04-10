@@ -15,18 +15,19 @@ import (
 	"github.com/tmc/langchaingo/tools"
 )
 
-func LookupTwitter(name string) string {
+func LookupTwitter(name string) (string, error) {
 	model:= os.Getenv("MODEL")
 
 	llm, err := ollama.New(ollama.WithModel(model))
 
 	if err != nil {
 		log.Fatalf("Failed to load model: %v", err)
+		return "", err
 	}
 
 	var template = fmt.Sprintf(`
 		given the full name %s I want you to get it me a link to their Twitter profile page.
-		Your answer should be a valid Twitter profile URL.
+		Your answer should be a valid Twitter profile page URL.
 		Answer only with the URL, do not include any other information.
 		`, name)
 
@@ -50,11 +51,15 @@ func LookupTwitter(name string) string {
 
 	if err != nil {
 		log.Fatalf("Failed to initialize agent: %v", err)
+		return "", err
 	}
+
+	fmt.Println("Running agent to get Twitter Link...")
 
 	answer, err := chains.Run(context.Background(), executor, template)
 	if err != nil {
 		log.Fatalf("Failed to run agent: %v", err)
+		return "", err
 	}
 
 	// Remove < from the start and > at the end from the answer
@@ -62,8 +67,8 @@ func LookupTwitter(name string) string {
 		trim := strings.TrimSpace(answer)
 		result := trim[1 : len(trim)-1]
 
-		return result
+		return result, nil
 	} else {
-		return answer
+		return answer, nil
 	}
 }

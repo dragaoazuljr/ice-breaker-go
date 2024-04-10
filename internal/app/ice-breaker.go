@@ -13,21 +13,28 @@ import (
 	"github.com/tmc/langchaingo/prompts"
 )
 
-func IceBreaker(name string) {
-	linkedInProfileUrl := agents.LookupLinkedIn(name);
-	linkedInData, error := scrapper.ScrapeLinkedInProfileData(linkedInProfileUrl);
+func IceBreaker(name string) (any, error) {
+	fmt.Println("IceBreaker for ", name)
 
-	 if error != nil {
-	 	fmt.Println(error)
-	  	return
+	linkedInProfileUrl, err:= agents.LookupLinkedIn(name);
+	if err != nil {
+		return nil, err
+	}
+		
+	linkedInData, err := scrapper.ScrapeLinkedInProfileData(linkedInProfileUrl);
+	 if err != nil {
+	  	return nil, err
 	 }
 
-	twitterProfileUrl := agents.LookupTwitter(name);
-	twitterData, error := scrapper.ScapeTwitterProfileData(twitterProfileUrl);
+	twitterProfileUrl, err:= agents.LookupTwitter(name);
+	if err != nil {
+		return nil, err
+	}
+
+	twitterData, err := scrapper.ScapeTwitterProfileData(twitterProfileUrl);
 	
-	if error != nil {
-		fmt.Println(error)
-		return
+	if err != nil {
+		return nil, err
 	}
 
 	var summary_template = `
@@ -56,8 +63,7 @@ Request:
 	llm, err:= ollama.New(ollama.WithModel(model))
 
 	if err != nil {
-		fmt.Println(err)
-		return
+		return nil, err
 	}
 
 	responseSchemas :=[]outputparser.ResponseSchema{
@@ -84,16 +90,16 @@ Request:
 
 	if err != nil {
 		fmt.Println(err)
-		return
+		return nil, err
 	}
 
 	response := res["text"].(string)
 
-	formatedResponse, err := structureParser.Parse(response)
+	formatedResponse, err :=  structureParser.Parse(response) 
 
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
 
-	fmt.Println(formatedResponse)
+	return formatedResponse, nil
 }

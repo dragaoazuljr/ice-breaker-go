@@ -16,13 +16,14 @@ import (
 	aTools "github.com/dragaoazuljr/ice-breaker-go/internal/app/tools"
 )
 
-func LookupLinkedIn(name string) string {
+func LookupLinkedIn(name string) (string, error) {
 	model := os.Getenv("MODEL")
 
 	llm, err := ollama.New(ollama.WithModel(model))
 
 	if err != nil {
 		log.Fatalf("Failed to load model: %v", err)
+		return "", err
 	}
 
 	var template = fmt.Sprintf(`
@@ -52,11 +53,15 @@ func LookupLinkedIn(name string) string {
 
 	if err != nil {
 		log.Fatalf("Failed to initialize agent: %v", err)
+		return "", err
 	}
+
+	fmt.Println("Running agent to get linkedin Link...")
 
 	answer, err := chains.Run(context.Background(), executor, template)
 	if err != nil {
 		log.Fatalf("Failed to run agent: %v", err)
+		return "", err
 	}
 
 	// Remove < from the start and > at the end from the answer
@@ -64,8 +69,8 @@ func LookupLinkedIn(name string) string {
 		trim := strings.TrimSpace(answer)
 		result := trim[1 : len(trim)-1]
 
-		return result
+		return result, nil
 	} else {
-		return answer
+		return answer, nil
 	}
 }

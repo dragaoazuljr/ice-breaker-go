@@ -12,6 +12,8 @@ import (
 )
 
 func ScapeTwitterProfileData(profileUrl string) (string, error) {
+	fmt.Println("Scraping Twitter Profile Data...")
+
 	service, err := selenium.NewChromeDriverService(os.Getenv("CHOMEDRIVER"), 4444)
 	if err != nil {
 		return "", err

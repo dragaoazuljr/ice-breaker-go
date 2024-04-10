@@ -13,6 +13,8 @@ import (
 )
 
 func ScrapeLinkedInProfileData(profileUrl string) (string, error) {
+	fmt.Println("Scraping LinkedIn Profile Data...")
+
 	service, err := selenium.NewChromeDriverService(os.Getenv("CHOMEDRIVER"), 4444)
 	if err != nil {
 		return "", err
